@@ -8,11 +8,7 @@ Created on Thu Jun  3 16:12:07 2021
 Series is a one-dimensional labeled array capable of holding data of any type (integer, string, float, python objects, etc.). The axis labels are collectively called index.
 """
 
-import pandas as pd
-s=pd.Series()
-
 pandas.Series( data, index, dtype)
-s=pd.Series(data=[1,2,3],index=['a','b','c'],dtype=float)
 
 1	
 data
@@ -45,15 +41,13 @@ Create a Series from ndarray
 data = np.array(['a','b','c','d'])
 s = pd.Series(data)
 
-with index:
-import numpy as np
+with index
 data = np.array(['a','b','c','d'])
-s = pd.Series(data,index=[100,101,102,103,105])
+s = pd.Series(data,index=[100,101,102,103])
 
 
 Create a Series from dict
 data = {'a' : 0., 'b' : 1., 'c' : 2.}
-
 s = pd.Series(data,index=['b','c','d','a'])
 
 
@@ -113,7 +107,7 @@ print( df)
 
 
 Create a DataFrame from Lists
-data = [[1,2,3,4,5],[6,7,8,9,0]]
+data = [1,2,3,4,5]
 df = pd.DataFrame(data)
 print (df)
 
@@ -121,21 +115,15 @@ print (df)
 data = [['Alex',10],['Bob',12],['Clarke',13]]
 df = pd.DataFrame(data,columns=['Name','Age'])
 print (df)
+df.columns
+df.index
 
-df.columns=['First_Name','Age']
-df.index=[100,200,300]
-
-
-df = pd.DataFrame(data,columns=['Name','Age'],dtype=str)
+df = pd.DataFrame(data,columns=['Name','Age'],dtype=float)
 print (df)
-int
-float
-str
-bolean
 
 
 Create a DataFrame from Dict of ndarrays / Lists
-data = {'Name':['Tom', 'Jack', 'Steve', 'Ricky'],'Age':[28,34,29,42,30]}
+data = {'Name':['Tom', 'Jack', 'Steve', 'Ricky'],'Age':[28,34,29,42]}
 df = pd.DataFrame(data)
 print (df)
 
@@ -181,8 +169,15 @@ print (df ['one'])
 
 Column Addition
 
+d = {'one' : pd.Series([1, 2, 3], index=['a', 'b', 'c']),
+   'two' : pd.Series([1, 2, 3, 4], index=['a', 'b', 'c', 'd'])}
 
-df['three']=pd.Series([10,20,30],index=['a','b','d'])
+df = pd.DataFrame(d)
+
+# Adding a new column to an existing DataFrame object with column label by passing new series
+
+print ("Adding a new column by passing as Series:")
+df['three']=pd.Series([10,20,30],index=['a','b','c'])
 print (df)
 
 print ("Adding a new column using the existing columns in DataFrame:")
@@ -211,25 +206,22 @@ d = {'one' : pd.Series([1, 2, 3], index=['a', 'b', 'c']),
 
 df = pd.DataFrame(d)
 print( df.loc['b'])
-
-
 df['one']['d']
 df['one']['d']=3
 
-df.loc[3]
 
 Selection by integer location
 print (df.iloc[2])
 
 
-print (df.iloc[1,4])
+print (df.iloc[2,2])
 
 
 
 Slice Rows
 Multiple rows can be selected using ‘ : ’ operator.
 df = pd.DataFrame(d)
-print (df[2:4])
+print df[2:4]
 
 
 
@@ -247,7 +239,6 @@ df = df.drop(0)
 
 
 Series Basic Functionality
-s = pd.Series([1,2,3,4,5,7,8,9])
 axes
 
 print ("The axes are:")
@@ -274,7 +265,7 @@ print(s.values)
 print ("The first 5 rows of the data series:")
 print (s.head())
 print ("The first two rows of the data series:")
-print(s.head(6))
+print(s.head(2))
 
 
 tail
@@ -290,7 +281,6 @@ DataFrame basic function
 s = {'Name':pd.Series(['Tom','James','Ricky','Vin','Steve','Smith','Jack']),
    'Age':pd.Series([25,26,25,23,30,29,23]),
    'Rating':pd.Series([4.23,3.24,3.98,2.56,3.20,4.6,3.8])}
-s=pd.DataFrame(s)
 
 axes
 
@@ -298,7 +288,7 @@ print ("The axes are:")
 print (s.axes)
 
 Transpose
-print (s.T)
+print (df.T)
 
 
 Empty
@@ -306,8 +296,9 @@ Empty
 print ("Is the Object empty?")
 print (s.empty)
 
+
 dtype
-print (d.dtypes)
+print (df.dtypes)
 
 ndim
 print ("The dimensions of the object:")
@@ -337,16 +328,219 @@ print ("The last 2 rows of the data series:")
 print (s.tail(2))
 
 
+axes
+
+print ("The axes are:")
+print (s.axes)
+s.view
+dir(s)
+Empty
+
+print ("Is the Object empty?")
+print (s.empty)
+
+
+ndim
+print ("The dimensions of the object:")
+print (s.ndim)
+
+size
+print (s.size)
+
+
+values
+print(s.values)
+
+print ("The first 5 rows of the data series:")
+print (s.head())
+print ("The first two rows of the data series:")
+print(s.head(2))
+
+
+tail
+print ("The last 5 rows of the data series:")
+print (s.tail())
+print ("The last 2 rows of the data series:")
+print (s.tail(2))
 
 
 
+Descriptive Statistics
+
+import pandas as pd
+import numpy as np
+
+#Create a Dictionary of series
+d = {'Name':pd.Series(['Tom','James','Ricky',\
+                       'Vin','Steve','Smith','Jack',])
+   }
+
+#Create a DataFrame
+df = pd.DataFrame(d)
+print df
+
+print (df.sum())
+axis=1
+print (df.sum(1))
+
+
+print (df.mean())
+df.mean(1)
+
+
+df.std()
+
+
+df=pd.DataFrame([1,1,2,2,2,3,4,5,6])
+df.count()
+df.cumsum()
+
+1   count()	Number of non-null observations
+2	sum()	Sum of values
+3	mean()	Mean of Values
+4	median()	Median of Values
+5	mode()	Mode of values
+6	std()	Standard Deviation of the Values
+7	min()	Minimum Value
+8	max()	Maximum Value
+9	abs()	Absolute Value
+10	prod()	Product of Values
+11	cumsum()	Cumulative Sum
+
+df.cumsum()
+
+only numeric
+
+df.describe()
+df=pd.DataFrame(['b','c','a'])
+
+df.describe(include=['object'])
+
+Fucntion
+Table wise Function Application: pipe()
+Row or Column Wise Function Application: apply()
+Element wise Function Application: applymap()
+
+
+df=pd.DataFrame(['1','2','3'])
+df-'a'
+
+
+def adder(ele1,ele2):
+   return ele1+ele2
+
+df = pd.DataFrame(np.random.randn(5,3),columns=['col1','col2','col3'])
+df.pipe(adder,2)
+df=df.applymap(lambda  x: x+np.mean(df.values))
+
+df.applymap(lambda x:x*100)
+
+
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame(np.random.randn(5,3),columns=['col1','col2','col3'])
+print (df.apply(np.mean))
+
+
+
+df = pd.DataFrame(np.random.randn(5,3),columns=['col1','col2','col3'])
+df['result']=df.apply(lambda x: x.max() - x.min(),1)
+print (df.apply(np.mean))
+df+1
+
+Element Wise Function Application
+df = pd.DataFrame(np.random.randn(5,3),columns=['col1','col2','col3'])
+
+# My custom function
+df['col1'].map(lambda x:x*100)
+print df.apply(np.mean)
+
+
+Reindexing
+Reorder the existing data to match a new set of labels.
+Insert missing value (NA) markers in label locations where no data for the label existed.
+
+N=20
+
+df = pd.DataFrame({
+   'A': pd.date_range(start='2016-01-01',periods=N,freq='D'),
+   'x': np.linspace(0,stop=N-1,num=N),
+   'y': np.random.rand(N),
+   'C': np.random.choice(['Low','Medium''High'],N).tolist(),
+   'D': np.random.normal(100, 10, size=(N)).tolist()
+})
+df.reindex(index=[0,1,3],columns=['A','C','f'])
+#reindex the DataFrame
+df_reindexed = df.reindex(index=[0,2,5], columns=['A', 'C', 'B'])
+
+print( df_reindexed)
+
+df1 = pd.DataFrame(np.random.randn(10,3),columns=['col1','col2','col3'])
+df2 = pd.DataFrame(np.random.randn(7,3),columns=['col1','col2','col3'])
+
+df1 = df2.reindex_like(df1)
+print (df1)
+
+
+
+# Padding NAN's
+print df2.reindex_like(df1)
+
+# Now Fill the NAN's with preceding Values
+print ("Data Frame with Forward Fill:")
+print (df2.reindex_like(df1,method='ffill'))
+
+
+# Padding NAN's
+print df2.reindex_like(df1)
+
+# Now Fill the NAN's with preceding Values
+print ("Data Frame with Forward Fill limiting to 1:")
+print (df2.reindex_like(df1,method='ffill',limit=1))
+
+df=pd.DataFrame([1,2,3,4,5])
+df.index=[100,102,103,104,105]
+df.columns=['a']
+df1.columns=['a','b']
+
+df1 = pd.DataFrame(np.random.randn(6,3),columns=['col1','col2','col3'])
+print (df1)
+
+print ("After renaming the rows and columns:")
+print( df1.rename(columns={'col1' : 'c1', 'col2' : 'c2'},index = {0 : 'apple', 1 : 'banana', 2 : 'durian'}))
+
+
+
+N=20
+df = pd.DataFrame({
+   'A': pd.date_range(start='2016-01-01',periods=N,freq='D'),
+   'x': np.linspace(0,stop=N-1,num=N),
+   'y': np.random.rand(N),
+   'C': np.random.choice(['Low','Medium','High'],N).tolist(),
+   'D': np.random.normal(100, 10, size=(N)).tolist()
+   })
+
+
+
+for col in df:
+   print( col)
+
+for i in df.columns:
+    print(df[i])
+
+
+   
+   
 import pandas as pd
 import numpy as np
 
 #read excel file===============================================
 df = pd.read_excel(r"C:\Users\Mukul Kirti Verma\Downloads\ExcelTestData1.xlsx")
 #display only first 5 rows=====================================
-df.head()
+
+
+df.describe()
 #display first 10 rows=========================================
 df.head(10)
 #display last 5 rows===========================================
@@ -367,6 +561,7 @@ df.replace({'MD': 0, 'DT1': 66}, 100)
 df.replace({'MD': {0: 100, 4: 400}})
 #replace with condition========================================
 df[df<=2]=1
+df['MD'][df['MD']==1]=2
 
 #list all column name==========================================
 print(list(df.columns))
@@ -376,7 +571,7 @@ print(list(df.index))
 r=list(df.index)
 c=list(df.columns)
 #iterate dataframe ============================================
-for i in df.index:
+for i in list(df.index):
     x=list(df.loc[i][:])
     print(x)
 
@@ -463,6 +658,3 @@ for i in list(df.index):
     print()
 for i in df['MD']:
     print(i)
-
-
-
