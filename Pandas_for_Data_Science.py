@@ -366,34 +366,31 @@ print (s.tail(2))
 
 
 Descriptive Statistics
-
 import pandas as pd
 import numpy as np
 
 #Create a Dictionary of series
-d = {'Name':pd.Series(['Tom','James','Ricky',\
-                       'Vin','Steve','Smith','Jack',])
-   }
+d = {'Name':pd.Series(['Tom','James','Ricky','Vin','Steve','Smith','Jack',
+   'Lee','David','Gasper','Betina','Andres']),
+   'Age':pd.Series([25,26,25,23,30,29,23,34,40,30,51,46]),
+   'Rating':pd.Series([4.23,3.24,3.98,2.56,3.20,4.6,3.8,3.78,2.98,4.80,4.10,3.65])
+}
 
 #Create a DataFrame
 df = pd.DataFrame(d)
 print df
 
-print (df.sum())
+print df.sum()
 axis=1
-print (df.sum(1))
+print df.sum(1)
 
 
-print (df.mean())
+print df.mean()
 df.mean(1)
 
 
 df.std()
 
-
-df=pd.DataFrame([1,1,2,2,2,3,4,5,6])
-df.count()
-df.cumsum()
 
 1   count()	Number of non-null observations
 2	sum()	Sum of values
@@ -410,9 +407,8 @@ df.cumsum()
 df.cumsum()
 
 only numeric
-
 df.describe()
-df=pd.DataFrame(['b','c','a'])
+
 
 df.describe(include=['object'])
 
@@ -422,17 +418,11 @@ Row or Column Wise Function Application: apply()
 Element wise Function Application: applymap()
 
 
-df=pd.DataFrame(['1','2','3'])
-df-'a'
-
-
 def adder(ele1,ele2):
    return ele1+ele2
 
 df = pd.DataFrame(np.random.randn(5,3),columns=['col1','col2','col3'])
 df.pipe(adder,2)
-df=df.applymap(lambda  x: x+np.mean(df.values))
-
 df.applymap(lambda x:x*100)
 
 
@@ -445,7 +435,7 @@ print (df.apply(np.mean))
 
 
 df = pd.DataFrame(np.random.randn(5,3),columns=['col1','col2','col3'])
-df['result']=df.apply(lambda x: x.max() - x.min(),1)
+df.apply(lambda x: x.max() - x.min())
 print (df.apply(np.mean))
 df+1
 
@@ -467,10 +457,10 @@ df = pd.DataFrame({
    'A': pd.date_range(start='2016-01-01',periods=N,freq='D'),
    'x': np.linspace(0,stop=N-1,num=N),
    'y': np.random.rand(N),
-   'C': np.random.choice(['Low','Medium''High'],N).tolist(),
+   'C': np.random.choice(['Low','Medium','High'],N).tolist(),
    'D': np.random.normal(100, 10, size=(N)).tolist()
 })
-df.reindex(index=[0,1,3],columns=['A','C','f'])
+
 #reindex the DataFrame
 df_reindexed = df.reindex(index=[0,2,5], columns=['A', 'C', 'B'])
 
@@ -479,7 +469,7 @@ print( df_reindexed)
 df1 = pd.DataFrame(np.random.randn(10,3),columns=['col1','col2','col3'])
 df2 = pd.DataFrame(np.random.randn(7,3),columns=['col1','col2','col3'])
 
-df1 = df2.reindex_like(df1)
+df1 = df1.reindex_like(df2)
 print (df1)
 
 
@@ -489,7 +479,7 @@ print df2.reindex_like(df1)
 
 # Now Fill the NAN's with preceding Values
 print ("Data Frame with Forward Fill:")
-print (df2.reindex_like(df1,method='ffill'))
+print df2.reindex_like(df1,method='ffill')
 
 
 # Padding NAN's
@@ -497,12 +487,8 @@ print df2.reindex_like(df1)
 
 # Now Fill the NAN's with preceding Values
 print ("Data Frame with Forward Fill limiting to 1:")
-print (df2.reindex_like(df1,method='ffill',limit=1))
+print df2.reindex_like(df1,method='ffill',limit=1)
 
-df=pd.DataFrame([1,2,3,4,5])
-df.index=[100,102,103,104,105]
-df.columns=['a']
-df1.columns=['a','b']
 
 df1 = pd.DataFrame(np.random.randn(6,3),columns=['col1','col2','col3'])
 print (df1)
@@ -512,35 +498,120 @@ print( df1.rename(columns={'col1' : 'c1', 'col2' : 'c2'},index = {0 : 'apple', 1
 
 
 
-N=20
-df = pd.DataFrame({
-   'A': pd.date_range(start='2016-01-01',periods=N,freq='D'),
-   'x': np.linspace(0,stop=N-1,num=N),
-   'y': np.random.rand(N),
-   'C': np.random.choice(['Low','Medium','High'],N).tolist(),
-   'D': np.random.normal(100, 10, size=(N)).tolist()
-   })
+
+Indexing and Selecting Data
+three way
+
+Sr.No	Indexing & Description
+1	
+.loc()
+
+Label based
+
+2	
+.iloc()
+
+Integer based
+
+3	
+.ix()
+
+.loc()
+Pandas provide various methods to have purely label based indexing. 
+When slicing, the start bound is also included. Integers are valid labels, 
+but they refer to the label and not the position.
+
+.loc() has multiple access methods like −
+
+A single scalar label
+A list of labels
+A slice object
+A Boolean array
+loc takes two single/list/range operator separated by ','. 
+The first one indicates the row and the second one indicates columns.
+
+
+df = pd.DataFrame(np.random.randn(8, 4),
+index = ['a','b','c','d','e','f','g','h'], columns = ['A', 'B', 'C', 'D'])
+
+#select all rows for a specific column
+print df.loc[:,'A']
+
+# Select all rows for multiple columns, say list[]
+print df.loc[:,['A','C']]
+
+
+# Select few rows for multiple columns, say list[]
+print df.loc[['a','b','f','h'],['A','C']]
 
 
 
-for col in df:
-   print( col)
+# Select range of rows for all columns
+print df.loc['a':'h']
 
-for i in df.columns:
-    print(df[i])
+# for getting values with a boolean array
+print df.loc['a']>0
 
 
-   
-   
+.iloc()
+Pandas provide various methods in order to get purely integer based indexing. Like python and numpy, these are 0-based indexing.
+
+The various access methods are as follows −
+
+An Integer
+A list of integers
+A range of values
+
+
+
+df = pd.DataFrame(np.random.randn(8, 4), columns = ['A', 'B', 'C', 'D'])
+
+# select all rows for a specific column
+print df.iloc[:4]
+
+
+# Integer slicing
+print df.iloc[:4]
+print df.iloc[1:5, 2:4]
+
+
+
+# Slicing through list of values
+print df.iloc[[1, 3, 5], [1, 3]]
+print df.iloc[1:3, :]
+print df.iloc[:,1:3]
+
+
+
+# Integer slicing
+print df.ix[:4]
+
+
+df = pd.DataFrame(np.random.randn(8, 4), columns = ['A', 'B', 'C', 'D'])
+# Index slicing
+print df.ix[:,'A']
+
+
+
+#print single column
+df = pd.DataFrame(np.random.randn(8, 4), columns = ['A', 'B', 'C', 'D'])
+print df['A']
+
+
+#print Multiple column
+print df[['A','B']]
+
+
+#with .column
+print df.A
+
 import pandas as pd
 import numpy as np
 
 #read excel file===============================================
 df = pd.read_excel(r"C:\Users\Mukul Kirti Verma\Downloads\ExcelTestData1.xlsx")
 #display only first 5 rows=====================================
-
-
-df.describe()
+df.head()
 #display first 10 rows=========================================
 df.head(10)
 #display last 5 rows===========================================
@@ -554,26 +625,22 @@ df=df.fillna(0)
 #replace set of values with other set of valus================
 df2=df.replace([0,2], [5,6])
 #replace a range
-df.replace(list(range(0,1000)), 0)
+df.replace(list(range(0,1001)), 0)
 #replace set of value with  dectionary==========================
 df.replace({0: 10, 2: 100})
 df.replace({'MD': 0, 'DT1': 66}, 100)
-df.replace({'MD': {0: 100, 4: 400}})
+df.replace({'MD': {0: 100, 2000: 400}})
 #replace with condition========================================
+
+df[df<=2].fillna(0)
 df[df<=2]=1
-df['MD'][df['MD']==1]=2
 
 #list all column name==========================================
 print(list(df.columns))
 #list all index================================================
 print(list(df.index))
 
-r=list(df.index)
-c=list(df.columns)
-#iterate dataframe ============================================
-for i in list(df.index):
-    x=list(df.loc[i][:])
-    print(x)
+
 
 #adding new column having sum of other columns=================
 df["total"] = df["MD"] + df["DT1"] + df["RHOB1"]
@@ -586,7 +653,7 @@ df["MD"].min(),
 df["MD"].max()
 
 df[["MD","DT1"]].max()#return seriese with max of both columns
-
+df[list(df.columns)].max()
 #add row having sum of DT1 and RHOB1 column====================
 sum_row=df[["DT1","RHOB1"]].sum()
 sum_row
@@ -594,8 +661,12 @@ sum_row
 df_sum=pd.DataFrame(data=sum_row).T
 df_sum
 
+
 df_sum=df_sum.reindex(columns=df.columns)
 df_sum
+
+
+df.append(df_sum)
 
 
 df_final=df.append(df_sum,ignore_index=True)
@@ -605,13 +676,18 @@ df_final.tail()
 #inserting a col in particular position
 df_final.insert(4, "abb",2)
 df_final.insert(4, "abb22", np.nan)
-df_final.insert(4, "abb1", df['MD'])
+df['abb1']=df['MD']
+df_final.insert(2, "abb1", df['MD'])
 df_final.insert(4, "abb2", "hi")
 df_final.head()
 
 #some grouping example
 ddd=df.sort_values(by=['DT1'])
 ddd=df.groupby(['DT1']).count()
+
+dd=pd.DataFrame([[1,1],[1,12],[1,2],[2,2],[2,2],[3,3]],columns=['a','b'])
+dd.groupby(by=['b']).count()
+
 ddd=df.groupby(['DT1']).first()
 ddd=df.groupby(['DT1']).max()
 ddd=df.groupby(['DT1']).min()
@@ -620,37 +696,43 @@ df_sub=df[["MD","RHOB1","DT1"]].groupby('DT1').sum()
 df_sub
 
 #writing dataframe to excel file with diffent sheet
-writer = pd.ExcelWriter(r'D:\tut\output.xlsx')
+writer = pd.ExcelWriter(r'D:\output.xlsx')
+df_sub.to_excel(writer,'Sheet3')
 ddd.to_excel(writer,'Sheet1')
 df_final.to_excel(writer,'Sheet2')
+
 writer.save()
 
 #parsing diffrent sheet of excel file
-xl = pd.ExcelFile(r"D:\tut\output.xlsx")
+xl = pd.ExcelFile(r"D:\output.xlsx")
 xl2=xl.sheet_names
-df = xl.parse("Sheet1")
+df = xl.parse(xl2[0])
 df.head()
 
 
-subham = pd.read_excel(r"D:\tut\output.xlsx",sheetname='Sheet2')
+df= pd.read_excel(r"D:\output.xlsx",sheet_name='Sheet2')
 df
 dframe = pd.read_excel(r"D:\tut\output.xlsx", sheetname='Sheet1')
 df
-df = pd.read_excel(r"D:\tut\output.xlsx",sheetname=1)
+df = pd.read_excel(r"D:\output.xlsx",sheet_name=1)
+df
+df= pd.read_excel(r"D:\output.xlsx",sheet_name=2,header=None)
+df.head(6)
+dframe = pd.read_excel(r"D:\output.xlsx", sheet_name=2)
+dframe
+dframe1 = pd.read_excel(r"D:\output.xlsx", sheet_name=1)
 
-df= pd.read_excel(r"D:\tut\output.xlsx",sheetname=1,header=None)
-
-dframe = pd.read_excel(r"D:\tut\output.xlsx", sheetname=1,header=1)
-dframe1 = pd.read_excel(r"D:\tut\output.xlsx", sheetname=1)
-
-dframe = pd.read_excel(r"D:\tut\output.xlsx",sheetname=1, index_col=2)
+dframe = pd.read_excel(r"D:\output.xlsx",sheet_name=2, index_col=4)
 
 dframe = pd.read
-dframe = pd.read_excel(r"D:\tut\output.xlsx",sheetname=1, skiprows=2)
+dframe = pd.read_excel(r"D:\output.xlsx",sheet_name=2, skiprows=4)
 
-df=pd.read_excel(r"D:\tut\output.xlsx", sheetname=1,skip_footer=2)
-dframe = pd.read_excel(r"D:\tut\output.xlsx", skip_footer=2)
-dframe = pd.read_excel(r"D:\tut\output.xlsx", sheetname=1, skiprows=2,skip_footer=2)
+df=pd.read_excel(r"D:\output.xlsx", sheet_name=2,skipfooter=5)
+dframe = pd.read_excel(r"D:\output.xlsx", skip_footer=2)
+dframe = pd.read_excel(r"D:\output.xlsx", sheet_name=2, skiprows=2,skipfooter=2)
+
+
+
 print(str(list(df)))
 for i in list(df.index):
     for j in list(df):
@@ -658,3 +740,250 @@ for i in list(df.index):
     print()
 for i in df['MD']:
     print(i)
+    
+    
+    
+To iterate over the rows of the DataFrame, we can use the following functions −
+
+iteritems() − to iterate over the (key,value) pairs
+
+iterrows() − iterate over the rows as (index,series) pairs
+
+itertuples() − iterate over the rows as namedtuples
+
+
+import pandas as pd
+import numpy as np
+ 
+df = pd.DataFrame(np.random.randn(4,3),columns=['col1','col2','col3'])
+for key,value in df.iteritems():
+   print key,value
+   
+   
+
+for row_index,row in df.iterrows():
+   print row_index,row
+   
+   
+for row in df.itertuples():
+    print row
+
+
+
+Sorting
+
+There are two kinds of sorting available in Pandas. They are −
+
+By label
+By Actual Value
+
+unsorted_df=pd.DataFrame(np.random.randn(10,2),index=[1,4,6,2,3,5,9,8,0,7],columns=['col2','col1'])
+print (unsorted_df)
+
+
+By Label
+Using the sort_index() method, by passing the axis arguments and the order of sorting, 
+DataFrame can be sorted. By default, sorting is done on row labels in ascending order.
+
+
+
+sorted_df=unsorted_df.sort_index()
+print( sorted_df)
+
+
+unsorted_df = pd.DataFrame(np.random.randn(10,2),index=[1,4,6,2,3,5,9,8,0,7],columns = ['col2','col1'])
+
+sorted_df = unsorted_df.sort_index(ascending=False)
+print (sorted_df)
+
+
+unsorted_df = pd.DataFrame(np.random.randn(10,2),index=[1,4,6,2,3,5,9,8,0,7],columns = ['col2','col1'])
+ 
+sorted_df=unsorted_df.sort_index(axis=1)
+
+print (sorted_df)
+
+
+By Value
+Like index sorting, sort_values() is the method for sorting by values. It accepts a 'by' argument which will use the column name of the DataFrame with which the values are to be sorted.
+
+
+unsorted_df = pd.DataFrame({'col1':[2,1,1,1],'col2':[1,3,2,4]})
+sorted_df = unsorted_df.sort_values(by='col1')
+
+print( sorted_df)
+
+
+By
+
+unsorted_df = pd.DataFrame({'col1':[2,1,1,1],'col2':[1,3,2,4]})
+   sorted_df = unsorted_df.sort_values(by=['col1','col2'])
+
+print (sorted_df)
+
+
+kind
+unsorted_df = pd.DataFrame({'col1':[2,1,1,1],'col2':[1,3,2,4]})
+sorted_df = unsorted_df.sort_values(by='col1' ,kind='mergesort')
+
+print (sorted_df)
+
+
+"""
+
+string function
+Sr.No	Function & Description
+1	
+lower()
+
+Converts strings in the Series/Index to lower case.
+
+2	
+upper()
+
+Converts strings in the Series/Index to upper case.
+
+3	
+len()
+
+Computes String length().
+
+4	
+strip()
+
+Helps strip whitespace(including newline) from each string in the Series/index from both the sides.
+
+5	
+split(' ')
+
+Splits each string with the given pattern.
+
+6	
+cat(sep=' ')
+
+Concatenates the series/index elements with given separator.
+
+7	
+get_dummies()
+
+Returns the DataFrame with One-Hot Encoded values.
+
+8	
+contains(pattern)
+
+Returns a Boolean value True for each element if the substring contains in the element, else False.
+
+9	
+replace(a,b)
+
+Replaces the value a with the value b.
+
+10	
+repeat(value)
+
+Repeats each element with specified number of times.
+
+11	
+count(pattern)
+
+Returns count of appearance of pattern in each element.
+
+12	
+startswith(pattern)
+
+Returns true if the element in the Series/Index starts with the pattern.
+
+13	
+endswith(pattern)
+
+Returns true if the element in the Series/Index ends with the pattern.
+
+14	
+find(pattern)
+
+Returns the first position of the first occurrence of the pattern.
+
+15	
+findall(pattern)
+
+Returns a list of all occurrence of the pattern.
+
+16	
+swapcase
+
+Swaps the case lower/upper.
+
+17	
+islower()
+
+Checks whether all characters in each string in the Series/Index in lower case or not. Returns Boolean
+
+18	
+isupper()
+
+Checks whether all characters in each string in the Series/Index in upper case or not. Returns Boolean.
+
+19	
+isnumeric()
+
+Checks whether all characters in each string in the Series/Index are numeric. Returns Boolean.
+"""
+
+s = pd.Series(['Tom', 'William Rick', 'John', 'Alber@t', np.nan, '1234','SteveSmith'])
+
+print (s.str.lower())
+
+
+xi
+
+df = pd.DataFrame(np.random.randn(8, 4), columns = ['A', 'B', 'C', 'D'])
+
+# Integer slicing
+print (df.ix[:4])
+
+
+print( df.ix[:,'A'])
+
+
+Percent_change
+Series, DatFrames and Panel, all have the function pct_change(). 
+This function compares every element with its prior element and computes the change percentage.
+
+
+import pandas as pd
+import numpy as np
+s = pd.Series([1,2,3,4,5,4])
+print s.pct_change()
+
+df = pd.DataFrame(np.random.randn(5, 2))
+print df.pct_change()
+
+
+
+Covariance
+Covariance is applied on series data. The Series object has a method cov to compute covariance between series objects. NA will be excluded automatically.
+
+
+import pandas as pd
+import numpy as np
+s1 = pd.Series(np.random.randn(10))
+s2 = pd.Series(np.random.randn(10))
+print s1.cov(s2)
+
+
+frame = pd.DataFrame(np.random.randn(10, 5), columns=['a', 'b', 'c', 'd', 'e'])
+print frame['a'].cov(frame['b'])
+print frame.cov()
+
+
+Correlation
+Correlation shows the linear relationship between any two array of values (series).
+There are multiple methods to compute the correlation like pearson(default),
+spearman and kendall.
+
+
+
+frame = pd.DataFrame(np.random.randn(10, 5), columns=['a', 'b', 'c', 'd', 'e'])
+
+print (frame['a'].corr(frame['b']))
+print (frame.corr())
