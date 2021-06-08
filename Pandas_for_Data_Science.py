@@ -743,7 +743,8 @@ for i in df['MD']:
     
     
     
-To iterate over the rows of the DataFrame, we can use the following functions −
+To iterate over the rows of the DataFrame, 
+we can use the following functions −
 
 iteritems() − to iterate over the (key,value) pairs
 
@@ -757,22 +758,23 @@ import numpy as np
  
 df = pd.DataFrame(np.random.randn(4,3),columns=['col1','col2','col3'])
 for key,value in df.iteritems():
-   print key,value
+   print (key,value)
    
    
 
 for row_index,row in df.iterrows():
-   print row_index,row
+   print( row_index,row)
    
    
 for row in df.itertuples():
-    print row
+    print (row)
 
 
 
 Sorting
 
-There are two kinds of sorting available in Pandas. They are −
+There are two kinds of sorting available in Pandas. 
+They are −
 
 By label
 By Actual Value
@@ -799,7 +801,7 @@ print (sorted_df)
 
 unsorted_df = pd.DataFrame(np.random.randn(10,2),index=[1,4,6,2,3,5,9,8,0,7],columns = ['col2','col1'])
  
-sorted_df=unsorted_df.sort_index(axis=1)
+sorted_df=unsorted_df.sort_index(axis=1,ascending=False)
 
 print (sorted_df)
 
@@ -816,8 +818,8 @@ print( sorted_df)
 
 By
 
-unsorted_df = pd.DataFrame({'col1':[2,1,1,1],'col2':[1,3,2,4]})
-   sorted_df = unsorted_df.sort_values(by=['col1','col2'])
+unsorted_df = pd.DataFrame({'col1':[2,1,1,1],'col2':[1,3,2,4]})   
+sorted_df = unsorted_df.sort_values(by=['col1','col2'])
 
 print (sorted_df)
 
@@ -934,16 +936,10 @@ s = pd.Series(['Tom', 'William Rick', 'John', 'Alber@t', np.nan, '1234','SteveSm
 print (s.str.lower())
 
 
-xi
-
-df = pd.DataFrame(np.random.randn(8, 4), columns = ['A', 'B', 'C', 'D'])
-
-# Integer slicing
-print (df.ix[:4])
 
 
-print( df.ix[:,'A'])
 
+Some more Analytical Function
 
 Percent_change
 Series, DatFrames and Panel, all have the function pct_change(). 
@@ -953,32 +949,38 @@ This function compares every element with its prior element and computes the cha
 import pandas as pd
 import numpy as np
 s = pd.Series([1,2,3,4,5,4])
-print s.pct_change()
+print (s.pct_change())
 
 df = pd.DataFrame(np.random.randn(5, 2))
-print df.pct_change()
+print (df.pct_change())
 
 
 
 Covariance
-Covariance is applied on series data. The Series object has a method cov to compute covariance between series objects. NA will be excluded automatically.
+Covariance is applied on series data.
+The Series object has a method cov to compute 
+covariance between series objects. NA will be excluded automatically.
 
 
 import pandas as pd
 import numpy as np
-s1 = pd.Series(np.random.randn(10))
-s2 = pd.Series(np.random.randn(10))
-print s1.cov(s2)
+s1 = pd.Series([1,2,3,4,5,6])
+s2 = pd.Series([1,2,3,4,5,6])
+
+print (s1.cov(s2))
+s1.plot()
 
 
 frame = pd.DataFrame(np.random.randn(10, 5), columns=['a', 'b', 'c', 'd', 'e'])
-print frame['a'].cov(frame['b'])
-print frame.cov()
+print (frame['a'].cov(frame['b']))
+print (frame.cov())
 
 
 Correlation
-Correlation shows the linear relationship between any two array of values (series).
-There are multiple methods to compute the correlation like pearson(default),
+Correlation shows the linear relationship between 
+any two array of values (series).
+There are multiple methods to compute the correlation 
+like pearson(default),
 spearman and kendall.
 
 
@@ -987,3 +989,252 @@ frame = pd.DataFrame(np.random.randn(10, 5), columns=['a', 'b', 'c', 'd', 'e'])
 
 print (frame['a'].corr(frame['b']))
 print (frame.corr())
+
+
+Window Functions
+
+rolling
+df = pd.DataFrame(np.random.randn(10, 4),
+   index = pd.date_range('1/1/2000', periods=10),
+   columns = ['A', 'B', 'C', 'D'])
+print (df.rolling(window=3).sum())
+
+df=pd.DataFrame([[1,1],[2,2],[3,3],[4,4],[5,5]])
+
+.expanding() Function
+
+
+print( df.expanding(min_periods=3).sum())
+
+
+
+Missing Data
+ 
+df = pd.DataFrame(np.random.randn(5, 3), index=['a', 'c', 'e', 'f',
+'h'],columns=['one', 'two', 'three'])
+
+df = df.reindex(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'])
+
+df
+
+print (df['one'].isnull())
+
+
+
+print( df['one'].notnull())
+
+
+When summing data, NA will be treated as Zero
+If the data are all NA, then the result will be NA
+
+df['one'].sum()
+
+df = pd.DataFrame(index=[0,1,2,3,4,5],columns=['one','two'])
+print( df.sum())
+
+
+
+Cleaning / Filling Missing Data
+
+Replace NaN with a Scalar Value
+print( df.fillna(0))
+
+
+Fill NA Forward and Backward
+Using the concepts of filling discussed in the ReIndexing Chapter we will fill the missing values.
+
+1	
+pad/fill
+
+Fill methods Forward
+
+2	
+bfill/backfill
+
+Fill methods Backward
+
+df = pd.DataFrame(np.random.randn(5, 3), index=['a', 'c', 'e', 'f','h'],columns=['one', 'two', 'three'])
+
+df = df.reindex(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'])
+
+print (df.fillna(method='pad'))
+
+print (df.fillna(method='backfill'))
+
+
+Drop Missing Values
+
+df = pd.DataFrame(np.random.randn(5, 3), index=['a', 'c', 'e', 'f',
+'h'],columns=['one', 'two', 'three'])
+
+df = df.reindex(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'])
+print( df.dropna())
+
+
+df = pd.DataFrame(np.random.randn(5, 3), index=['a', 'c', 'e', 'f',
+'h'],columns=['one', 'two', 'three'])
+
+print (df.dropna(axis=1))
+
+
+
+Any groupby operation involves one of the following 
+operations on the original object.
+They are −
+
+1. Splitting the Object
+
+2. Applying a function
+
+3. Combining the results
+
+In many situations, we split the data into sets and we apply some functionality on each subset. 
+In the apply functionality, we can perform the following operations −
+
+1. Aggregation − computing a summary statistic
+
+2. Transformation − perform some group-specific operation
+
+3. Filtration − discarding the data with some condition
+
+
+import pandas as pd
+
+ipl_data = {'Team': ['Riders', 'Riders', 'Devils', 'Devils', 'Kings',
+   'kings', 'Kings', 'Kings', 'Riders', 'Royals', 'Royals', 'Riders'],
+   'Rank': [1, 2, 2, 3, 3,4 ,1 ,1,2 , 4,1,2],
+   'Year': [2014,2015,2014,2015,2014,2015,2016,2017,2016,2014,2015,2017],
+   'Points':[876,789,863,673,741,812,756,788,694,701,804,690]}
+df = pd.DataFrame(ipl_data)
+
+print( df )
+
+
+
+
+Split Data into Groups
+Pandas object can be split into any of their objects. 
+There are multiple ways to split an object like −
+
+x
+
+
+# import the pandas library
+import pandas as pd
+
+ipl_data = {'Team': ['Riders', 'Riders', 'Devils', 'Devils', 'Kings',
+   'kings', 'Kings', 'Kings', 'Riders', 'Royals', 'Royals', 'Riders'],
+   'Rank': [1, 2, 2, 3, 3,4 ,1 ,1,2 , 4,1,2],
+   'Year': [2014,2015,2014,2015,2014,2015,2016,2017,2016,2014,2015,2017],
+   'Points':[876,789,863,673,741,812,756,788,694,701,804,690]}
+df = pd.DataFrame(ipl_data)
+
+print (df.groupby('Team'))
+
+
+print (df.groupby('Team').groups)
+Its output is as follows −
+
+
+Group by with multiple columns −
+
+
+
+
+
+print( df.groupby(['Team','Year']).groups)
+Its output is as follows −
+
+{('Kings', 2014): Int64Index([4], dtype='int64'),
+ ('Royals', 2014): Int64Index([9], dtype='int64'),
+ ('Riders', 2014): Int64Index([0], dtype='int64'),
+ ('Riders', 2015): Int64Index([1], dtype='int64'),
+ ('Kings', 2016): Int64Index([6], dtype='int64'),
+ ('Riders', 2016): Int64Index([8], dtype='int64'),
+ ('Riders', 2017): Int64Index([11], dtype='int64'),
+ ('Devils', 2014): Int64Index([2], dtype='int64'),
+ ('Devils', 2015): Int64Index([3], dtype='int64'),
+ ('kings', 2015): Int64Index([5], dtype='int64'),
+ ('Royals', 2015): Int64Index([10], dtype='int64'),
+ ('Kings', 2017): Int64Index([7], dtype='int64')}
+Iterating through Groups
+With the groupby object in hand, we can iterate through the object similar to itertools.obj.
+
+
+grouped = df.groupby('Year')
+
+for name,group in grouped:
+   #print (name)
+   print (group)
+
+
+By default, the groupby object has the same label name as the group name.
+
+Select a Group
+
+
+grouped = df.groupby('Year')
+print (grouped.get_group(2014))
+
+
+Aggregations
+An aggregated function returns a single aggregated value for each group. 
+Once the group by object is created, several aggregation operations can be performed on 
+the grouped data.
+
+
+grouped = df.groupby('Year')
+print (grouped['Points'].agg(np.mean))
+
+
+Another way to see the size of each group is by applying the size() function −
+
+
+ipl_data = {'Team': ['Riders', 'Riders', 'Devils', 'Devils', 'Kings',
+   'kings', 'Kings', 'Kings', 'Riders', 'Royals', 'Royals', 'Riders'],
+   'Rank': [1, 2, 2, 3, 3,4 ,1 ,1,2 , 4,1,2],
+   'Year': [2014,2015,2014,2015,2014,2015,2016,2017,2016,2014,2015,2017],
+   'Points':[876,789,863,673,741,812,756,788,694,701,804,690]}
+df = pd.DataFrame(ipl_data)
+
+grouped = df.groupby('Team')
+print (grouped.agg(np.size))
+
+
+Applying Multiple Aggregation Functions at Once
+With grouped Series, you can also pass a list or dict of functions to 
+do aggregation with, and generate DataFrame as output −
+
+
+
+grouped = df.groupby('Team')
+print (grouped['Points'].agg([np.sum, np.mean, np.std]))
+Its output is as follows −
+
+Team      sum      mean          std
+Devils   1536   768.000000   134.350288
+Kings    2285   761.666667    24.006943
+Riders   3049   762.250000    88.567771
+Royals   1505   752.500000    72.831998
+kings     812   812.000000          NaN
+
+
+Transformations
+Transformation on a group or a column returns an object that is indexed the same 
+size of that is being grouped. Thus, the transform should return a result that is 
+the same size as that of a group chunk.
+
+
+grouped = df.groupby('Team')
+score = lambda x: x-max(x)
+print( grouped.transform(score))
+
+  
+Filtration
+Filtration filters the data on a defined criteria and returns the subset of data. 
+The filter() function is used to filter the data.
+
+
+print (df.groupby('Team').filter(lambda x: len(x) >= 3))
+
+
