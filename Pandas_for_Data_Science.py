@@ -1078,6 +1078,8 @@ print (df.dropna(axis=1))
 
 
 
+
+
 Any groupby operation involves one of the following 
 operations on the original object.
 They are −
@@ -1236,5 +1238,342 @@ The filter() function is used to filter the data.
 
 
 print (df.groupby('Team').filter(lambda x: len(x) >= 3))
+
+
+"""
+Merging/Joining
+Pandas has full-featured, high performance in-memory join operations idiomatically very similar to relational databases like SQL.
+
+Pandas provides a single function, merge, as the entry point for all standard database join operations between DataFrame objects −
+
+pd.merge(left, right, how='inner', on=None, left_on=None, right_on=None,
+left_index=False, right_index=False, sort=True)
+
+
+Here, we have used the following parameters −
+
+left − A DataFrame object.
+
+right − Another DataFrame object.
+
+on − Columns (names) to join on. Must be found in both the left and right DataFrame objects.
+
+left_on − Columns from the left DataFrame to use as keys. Can either be column names or arrays with length equal to the length of the DataFrame.
+
+right_on − Columns from the right DataFrame to use as keys. Can either be column names or arrays with length equal to the length of the DataFrame.
+
+left_index − If True, use the index (row labels) from the left DataFrame as its join key(s). In case of a DataFrame with a MultiIndex (hierarchical), the number of levels must match the number of join keys from the right DataFrame.
+
+right_index − Same usage as left_index for the right DataFrame.
+
+how − One of 'left', 'right', 'outer', 'inner'. Defaults to inner. Each method has been described below.
+
+sort − Sort the result DataFrame by the join keys in lexicographical order. Defaults to True, setting to False will improve the performance substantially in many cases.
+"""
+
+import pandas as pd
+left = pd.DataFrame({
+   'id':[1,2,3,4,5],
+   'Name': ['Alex', 'Amy', 'Allen', 'Alice', 'Ayoung'],
+   'subject_id':['sub1','sub2','sub4','sub6','sub5']})
+right = pd.DataFrame(
+   {'id':[1,1,2,3,4,5],
+   'Name': ['krish','Billy', 'Brian', 'Bran', 'Bryce', 'Betty'],
+   'subject_id':['sub3''sub2','sub4','sub3','sub6','sub5']})
+print (left)
+print (right)
+
+
+print (pd.merge(left,right,on='id'))
+
+print (pd.merge(left,right,on=['id','subject_id']))
+
+
+Merge Using 'how' Argument
+
+Merge Method	SQL Equivalent	Description
+left	        LEFT OUTER     JOIN	Use keys from left object
+right	       RIGHT OUTER     JOIN	Use keys from right object
+outer	        FULL OUTER     JOIN	Use union of keys
+inner	       INNER JOIN	   Use intersection of keys
+
+print (pd.merge(left, right, on='subject_id', how='left'))
+
+
+print (pd.merge(left, right, on='subject_id', how='right'))
+
+print (pd.merge(left, right, how='outer', on='subject_id'))
+
+print( pd.merge(left, right, on='subject_id', how='inner'))
+
+
+
+Concatenation
+
+Pandas provides various facilities for easily combining together Series, DataFrame, and Panel objects.
+
+ pd.concat(objs,axis=0,join='outer',join_axes=None,
+ignore_index=False)
+objs − This is a sequence or mapping of Series, DataFrame, or Panel objects.
+
+axis − {0, 1, ...}, default 0. This is the axis to concatenate along.
+
+join − {‘inner’, ‘outer’}, default ‘outer’. How to handle indexes on other axis(es). Outer for union and inner for intersection.
+
+ignore_index − boolean, default False. If True, do not use the index values on the concatenation axis. The resulting axis will be labeled 0, ..., n - 1.
+
+join_axes − This is the list of Index objects. Specific indexes to use for the other (n-1) axes instead of performing inner/outer set logic.
+
+
+import pandas as pd
+
+one = pd.DataFrame({
+   'Name': ['Alex', 'Amy', 'Allen', 'Alice', 'Ayoung'],
+   'subject_id':['sub1','sub2','sub4','sub6','sub5'],
+   'Marks_scored':[98,90,87,69,78]},
+   index=[1,2,3,4,5])
+
+two = pd.DataFrame({
+   'Name': ['Billy', 'Brian', 'Bran', 'Bryce', 'Betty'],
+   'subject_id':['sub2','sub4','sub3','sub6','sub5'],
+   'Marks_scored':[89,80,79,97,88]},
+   index=[1,2,3,4,5])
+
+pd.concat([one,two])
+
+
+print (pd.concat([one,two,two]))
+
+
+Suppose we wanted to associate specific keys with 
+each of the pieces of the chopped up DataFrame. 
+We can do this by using the keys argument −
+
+
+print (pd.concat([one,two],keys=['x','y']))
+
+
+ignore index
+
+print (pd.concat([one,two],keys=['x','y'],ignore_index=True))
+
+
+axis
+
+print( pd.concat([one,two],axis=1))
+
+append
+
+print (one.append([two,one,two]))
+
+
+
+
+Time Series
+Pandas provide a robust tool for working time with Time series data, especially in the financial sector. While working with time series data, we frequently come across the following −
+
+Generating sequence of time
+Convert the time series to different frequencies
+Pandas provides a relatively compact and self-contained set of tools for performing the above tasks.
+
+Get Current Time
+datetime.now() gives you the current date and time.
+
+
+
+import pandas as pd
+
+print (pd.datetime.now())
+
+
+
+df = pd.DataFrame({'year': [2015, 2016],
+                   'month': [2, 3],
+                   'day': [4, 5]})
+x=pd.to_datetime(df)
+
+
+
+
+
+
+Create a TimeStamp
+
+pd.Timestamp('2017-03-01')
+
+pd.Timestamp(25,unit='h')
+
+
+Create a Range of Time
+
+range(0,10)
+
+pd.date_range(start='1/1/2018', end='1/08/2018')
+
+pd.date_range(start='1/1/2018', periods=8)
+
+pd.date_range(end='1/1/2018', periods=8)
+
+pd.date_range(start='2018-04-24', end='2018-04-27', periods=3)
+
+pd.date_range("11:00", "13:30", periods=5).time
+
+
+pd.date_range("11:00", "13:30", freq="30min").time
+
+
+frequency
+pd.date_range(start='1/1/2018', periods=5, freq='M')
+
+pd.date_range(start='1/1/2018', periods=5, freq='3M')
+
+
+pd.date_range(start='1/1/2018', periods=5, tz='Asia/Kolkata')
+
+#inclued start and end
+pd.date_range(start='2017-01-01', end='2017-01-04', closed=None)
+
+
+pd.date_range(start='2017-01-01', end='2017-01-04', closed='left')
+
+pd.date_range(start='2017-01-01', end='2017-01-04', closed='right')
+
+time delta
+
+pd.to_timedelta('1 days 06:05:01.00003')
+
+
+pd.to_timedelta(['1 days 06:05:01.00003', '15.5us', 'nan'])
+
+Converting numbers by specifying the unit keyword argument:
+
+    
+import numpy as np
+pd.to_timedelta(np.arange(5), unit='d')
+
+pd.to_timedelta(np.arange(5), unit='d')+\
+pd.to_timedelta(np.arange(5), unit='h')
+
+
+pd.bdate_range(start='6/9/2021',periods=5)
+
+
+Period Range
+pd.period_range(start='2017-01-01', end='2018-01-01', freq='Y')
+pd.period_range(start='2017-01-01', end='2018-01-01', freq='M')
+pd.period_range(start='2017-01-01', end='2018-01-01', freq='D')
+pd.period_range(start='2017-01-01', end='2018-01-01', freq='H')
+pd.period_range(start='2017-01-01', end='2018-01-01', freq='S')
+
+
+timedelta_range
+pd.timedelta_range(start='1 day', periods=4)
+#TimedeltaIndex(['1 days', '2 days', '3 days', '4 days'],dtype='timedelta64[ns]', freq='D')
+
+pd.timedelta_range(start='1 day', periods=4, closed='right')
+#TimedeltaIndex(['2 days', '3 days', '4 days'],dtype='timedelta64[ns]', freq='D')
+
+
+pd.timedelta_range(start='1 day', end='2 days', freq='6H')
+#TimedeltaIndex(['1 days 00:00:00', '1 days 06:00:00', '1 days 12:00:00','1 days 18:00:00', '2 days 00:00:00']
+#     dtype='timedelta64[ns]', freq='6H')
+
+
+#interval range
+pd.interval_range(start=0, end=5)
+
+
+
+pd.interval_range(start=pd.Timestamp('2017-01-01'),
+                  end=pd.Timestamp('2017-01-04'))
+
+
+pd.interval_range(start=0, end=6, periods=4)
+
+
+pd.interval_range(end=5, periods=4, closed='both')
+
+
+Categorical object can be created in multiple ways. 
+The different ways have been described below −
+
+
+category
+By specifying the dtype as "category" in pandas object creation.
+
+s = pd.Series(["a","b","c","a"], dtype="category")
+print (s)
+
+The number of elements passed to the series object is four, 
+but the categories are only three. Observe the same in the output Categories.
+
+pd.Categorical
+Using the standard pandas Categorical constructor, we can create a category object.
+
+pandas.Categorical(values, categories, ordered)
+
+import pandas as pd
+cat = pd.Categorical(['a', 'b', 'c', 'a', 'b', 'c'])
+print( cat)
+print( cat.categories)
+
+specify category
+cat = cat=pd.Categorical(['a','b','c','a','b','c','d'], ['c', 'b', 'a'])
+print( cat.)
+
+[a, b, c, a, b, c, NaN]
+Categories (3, object): [c, b, a]
+Here, the second argument signifies the categories. 
+Thus, any value which is not present in the categories will be treated as NaN.
+
+order
+cat1=pd.Categorical(['a','b','c','a','b','c','c'], ['c', 'b', 'a'],ordered=True)
+cat = pd.Categorical(['a','b','c','b','b','c','c'], ['c', 'b', 'a'],ordered=True)
+print(cat)
+print (cat.ordered)
+cat==cat1
+
+comparing equality (== and !=) to a list-like object (list, Series, array, ...) of the same length as the categorical data.
+
+all comparisons (==, !=, >, >=, <, and <=) of categorical data to another categorical Series, when ordered==True and the categories are the same.
+
+
+
+[a, b, c, a, b, c, NaN]
+Categories (3, object): [c < b < a]
+
+
+
+return list of category
+import numpy as np
+s = pd.Categorical(["a", "c", "c", np.nan], categories=["b", "a", "c"])
+print (s.categories)
+
+output
+Index([u'b', u'a', u'c'], dtype='object')
+
+
+
+
+s = pd.Series(["a","b","c","a"], dtype="category")
+
+s.cat.categories = ["Group {}".format(g) for g in s.cat.categories]
+print (s.cat.categories)
+
+Appending New Categories
+Using the Categorical.add.categories() method, new categories can be appended.
+
+
+s = pd.Series(["a","b","c","a"], dtype="category")
+s = s.cat.add_categories(['e'])
+print (s.cat.categories)
+
+
+Removing Categories
+Using the Categorical.remove_categories() method, unwanted categories can be removed.
+
+
+print( s.cat.remove_categories("a"))
+
 
 
