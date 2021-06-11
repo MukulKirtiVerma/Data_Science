@@ -1577,3 +1577,159 @@ print( s.cat.remove_categories("a"))
 
 
 
+Visualization
+ 
+ 
+Basic Plotting: plot
+This functionality on Series and DataFrame is just a simple wrapper 
+around the matplotlib libraries plot() method.
+
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame(np.random.randn(10,4),index=pd.date_range('1/1/2000',
+   periods=10), columns=list('ABCD'))
+df['A'].plot()
+
+
+
+bar or barh for bar plots
+hist for histogram
+box for boxplot
+area for area plots
+scatter for scatter plots
+
+
+
+1. Bar Plot
+Let us now see what a Bar Plot is by creating one.
+ A bar plot can be created in the following way −
+
+
+
+df = pd.DataFrame(np.random.rand(10,4),columns=['a','b','c','d'])
+df.plot.bar()
+
+
+To produce a stacked bar plot, pass stacked=True −
+
+import pandas as pd
+df = pd.DataFrame(np.random.rand(10,4),columns=['a','b','c','d'])
+df.plot.bar(stacked=True)
+
+
+
+To get horizontal bar plots, use the barh method −
+
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame(np.random.rand(10,4),columns=['a','b','c','d')
+
+df.plot.barh(stacked=True)
+
+[1,2,1,2,4,1,2,4,5,1,3,4,5,2,5,6,2,1]
+a=1,2,1,2,1,1,1,3,2,2,1
+b=4,4,5,4,5,5,6
+
+Histograms
+Histograms can be plotted using the plot.hist() method. We can specify number of bins.
+
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({'a':np.random.randn(1000)+1,'b':np.random.randn(1000),'c':
+np.random.randn(1000) - 1}, columns=['a', 'b', 'c'])
+
+df.plot.hist(bins=20)
+
+
+To plot different histograms for each column, use the following code −
+
+
+df=pd.DataFrame({'a':np.random.randn(1000)+1,'b':np.random.randn(1000),'c':np.random.randn(1000) - 1}, columns=['a', 'b', 'c'])
+
+
+
+Box Plots
+Boxplot can be drawn calling Series.box.plot() and DataFrame.box.plot(),
+ or DataFrame.boxplot() to visualize the distribution of values within each column.
+
+For instance, here is a boxplot representing five trials of 10 observations
+ of a uniform random variable on [0,1).
+
+
+df = pd.DataFrame(np.random.rand(10, 5), columns=['A', 'B', 'C', 'D', 'E'])
+df.plot.box()
+
+
+Area Plot
+Area plot can be created using the Series.plot.area() or the DataFrame.plot.area() methods.
+
+df = pd.DataFrame(np.random.rand(10, 4), columns=['a', 'b', 'c', 'd'])
+df['a'].plot.area()
+
+
+Scatter Plot
+Scatter plot can be created using the DataFrame.plot.scatter() methods.
+
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame(np.random.rand(50, 4), columns=['a', 'b', 'c', 'd'])
+df.plot.scatter(x='a', y='b')
+
+
+Pie Chart
+Pie chart can be created using the DataFrame.plot.pie() method.
+
+
+df = pd.DataFrame(3 * np.random.rand(2), index=['a', 'b', ], columns=['x'])
+df.plot.pie(subplots=True)
+
+
+Using If/Truth Statement with Pandas
+Pandas follows the numpy convention of raising an error when you try 
+to convert something to a bool. 
+This happens in an if or when using the Boolean 
+operations, and, or, or not. It is not clear what the result should be.
+ Should it be True because it is not zerolength? False because there are False values? 
+ It is unclear, so instead, Pandas raises a ValueError −
+ 
+import pandas as pd
+a=pd.Series([False, True, True])
+if pd.Series([False, True, False]).all():
+   print ('I am True')
+   
+a=pd.Series(['hi'])
+Use 
+a.empty, 
+a.bool
+
+a.any()
+a.all()
+
+
+
+
+df Query
+df = pd.DataFrame({'A': range(1, 6),
+                   'B': range(10, 0, -2),
+                   'C C': range(10, 5, -1)})
+df.query('A > B')
+
+df.query('A < B')
+
+or
+df[df.A > df.B]
+
+
+For columns with spaces in their name, you can use backtick quoting.
+
+df.query('B == `C C`')
+or
+
+df[df.B == df['C C']]
+
+
+
